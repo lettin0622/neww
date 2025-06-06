@@ -30,23 +30,23 @@ function setup() {
 function draw() {
   image(video, 0, 0);
 
-  // Ensure at least one hand is detected
+  // 只偵測兩隻手的食指
   if (hands.length > 0) {
     for (let hand of hands) {
       if (hand.confidence > 0.1) {
-        // Loop through keypoints and draw circles
-        for (let i = 0; i < hand.keypoints.length; i++) {
-          let keypoint = hand.keypoints[i];
-
-          // Color-code based on left or right hand
+        // 找出食指 keypoint（名稱可能是 "index_finger_tip" 或 "indexFinger"）
+        let indexKeypoint = hand.keypoints.find(
+          kp => kp.name === "index_finger_tip" || kp.part === "indexFinger"
+        );
+        if (indexKeypoint) {
+          // 左手紫色，右手黃色
           if (hand.handedness == "Left") {
             fill(255, 0, 255);
           } else {
             fill(255, 255, 0);
           }
-
           noStroke();
-          circle(keypoint.x, keypoint.y, 16);
+          circle(indexKeypoint.x, indexKeypoint.y, 20);
         }
       }
     }
