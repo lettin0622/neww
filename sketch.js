@@ -58,12 +58,17 @@ function gotHands(results) {
 }
 
 function setup() {
-  createCanvas(640, 480);
-  video = createCapture(VIDEO, { flipped: true });
+  createCanvas(windowWidth, windowHeight);
+  video = createCapture(VIDEO);
+  video.size(width, height);
   video.hide();
 
-  // Start detecting hands
-  handPose.detectStart(video, gotHands);
+  handPose = ml5.handpose(video, modelReady);
+}
+
+function modelReady() {
+  console.log("Handpose model loaded!");
+  handPose.on("predict", gotHands);
 }
 
 function draw() {
